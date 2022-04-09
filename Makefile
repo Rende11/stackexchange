@@ -7,4 +7,4 @@ repl:
 		clj -M:cider
 
 run:
-		clj -M -m stackexchange.core
+		clj -M:run
