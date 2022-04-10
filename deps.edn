@@ -4,7 +4,8 @@
   ring/ring-core {:mvn/version "1.9.5"}
   ring/ring-jetty-adapter {:mvn/version "1.9.5"}
   ring/ring-json {:mvn/version "0.5.1"}
-  clj-http/clj-http {:mvn/version "3.12.3"}}
+  clj-http/clj-http {:mvn/version "3.12.3"}
+  metosin/reitit {:mvn/version "0.5.18"}}
 
  :aliases
  {:test {:extra-deps {lambdaisland/kaocha {:mvn/version "1.64.1010"}}
