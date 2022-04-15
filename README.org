@@ -1,1 +1,62 @@
 * Example of interactions with the Stackexchange API.
+
+
+** Configuration run
+
+** Examples
+
+** Measurements
+#+BEGIN_SRC Clojure
+(time
+   (app-handler {:request-method :get
+                 :uri "/search"
+                 :query-string "tag=cpp&tag=clojure&tag=javascript&tag=php&tag=java&tag=purescript&tag=ruby"
+                 :pool-size 1})
+   )
+  ;; => "Elapsed time: 8169.954815 msecs"
+
+  (time
+   (app-handler {:request-method :get
+                 :uri "/search"
+                 :query-string "tag=cpp&tag=clojure&tag=javascript&tag=php&tag=java&tag=purescript&tag=ruby"
+                 :pool-size 2})
+   )
+  ;; => "Elapsed time: 3160.608194 msecs"
+
+  (time
+   (app-handler {:request-method :get
+                 :uri "/search"
+                 :query-string "tag=cpp&tag=clojure&tag=javascript&tag=php&tag=java&tag=purescript&tag=ruby"
+                 :pool-size 4})
+   )
+  ;; => "Elapsed time: 1399.67507 msecs"
+
+  (time
+   (app-handler {:request-method :get
+                 :uri "/search"
+                 :query-string "tag=cpp&tag=clojure&tag=javascript&tag=php&tag=java&tag=purescript&tag=ruby"
+                 :pool-size 10})
+   )
+  ;; => "Elapsed time: 685.870774 msecs"
+#+END_SRC
+
+** Useful commands
+#+BEGIN_SRC
+;; run dev repl
+make repl
+
+;; run test
+make test
+
+;; run via clojure cli
+make run-clj
+
+;; build ubejar
+make build
+
+;; run uberjar
+make run-jar
+#+END_SRC
+
+** Notes
+See ~Makefile~ for command details

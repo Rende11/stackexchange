@@ -1,4 +1,5 @@
-{:deps
+{:paths ["src" "classes"]
+ :deps
  {org.clojure/clojure {:mvn/version "1.11.1"}
   club.donutpower/system {:mvn/version "0.0.127"}
   ring/ring-core {:mvn/version "1.9.5"}
@@ -14,4 +15,7 @@
          :main-opts   ["-m" "kaocha.runner"]}
   :cider {:extra-deps {cider/cider-nrepl {:mvn/version "0.28.3"}}
           :main-opts ["-m" "nrepl.cmdline" "--middleware" "[cider.nrepl/cider-middleware]"]}
-  :run {:main-opts ["-m" "stackexchange.core"]}}}
+  :run {:main-opts ["-m" "stackexchange.core"]}
+  :uberjar {:replace-deps {uberdeps/uberdeps {:mvn/version "1.1.4"}}
+            :replace-paths []
+            :main-opts ["-m" "uberdeps.uberjar"]}}}

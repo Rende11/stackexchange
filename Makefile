@@ -9,5 +9,14 @@ test:
 repl:
 		clj -M:cider
 
-run:
+run-clj:
 		clj -M:run
+
+run-jar:
+		java -jar ./target/stackexchange.jar
+
+build:
+		rm -rf ./classes
+		mkdir ./classes
+		clojure -e "(compile 'stackexchange.core)"
+		clojure -A:uberjar --main-class stackexchange.core --target ./target/stackexchange.jar

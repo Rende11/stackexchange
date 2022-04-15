@@ -1,7 +1,8 @@
 (ns stackexchange.core
   (:require [donut.system :as ds]
             [ring.adapter.jetty :as jetty]
-            [stackexchange.handler :as handler]))
+            [stackexchange.handler :as handler])
+  (:gen-class))
 
 
 (def system
@@ -28,7 +29,7 @@
                                (handler/app-handler (assoc req :pool-size pool-size))))
                     :conf {:pool-size (ds/ref [:env :pool-size])}}}}})
 
-(defn -main [& _args]
+(defn -main [& args]
   (ds/signal system :start))
 
 (comment

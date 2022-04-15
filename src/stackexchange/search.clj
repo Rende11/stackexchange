@@ -26,7 +26,6 @@
     {:total-tags total-tags
      :answers answer-count-sum}))
 
-
 (defn search [{:keys [params pool-size start-time-ms] :as req}]
   (let [[tag :as tags] (:tag params)
         stats (if (> (count tags) 1)
