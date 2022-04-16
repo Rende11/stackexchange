@@ -27,13 +27,16 @@
      :answers answer-count-sum}))
 
 (defn search [{:keys [params pool-size start-time-ms] :as req}]
-  (let [[tag :as tags] (:tag params)
-        stats (if (> (count tags) 1)
-                (cp/with-shutdown! [pool (cp/threadpool (or pool-size 1))]
-                  (let [resps-data (cp/upmap pool (fn [tag]
-                                                    [tag (process-response (search-req tag))]) tags)]
-                    (into {} resps-data)))
-                {tag (process-response (search-req tag))})
-        end-time-ms (System/currentTimeMillis)]
+  (if-let [tags (:tag params)]
+    (let [stats (if (coll? tags)
+                  (cp/with-shutdown! [pool (cp/threadpool (or pool-size 1))]
+                    (let [resps-data (cp/upmap pool (fn [tag]
+                                                      [tag (process-response (search-req tag))]) tags)]
+                      (into {} resps-data)))
+                  {tags (process-response (search-req tags))})
+          end-time-ms (System/currentTimeMillis)]
+      {:status 200
+       :body (assoc stats :spent-ms (- end-time-ms start-time-ms))})
     {:status 200
-     :body (assoc stats :spent-ms (- end-time-ms start-time-ms))}))
+     :body {:message "No tags in request"}}))
+
