@@ -18,5 +18,5 @@ run-jar:
 build:
 		rm -rf ./classes
 		mkdir ./classes
-		clojure -e "(compile 'stackexchange.core)"
-		clojure -A:uberjar --main-class stackexchange.core --target ./target/stackexchange.jar
+		clj -e "(compile 'stackexchange.core)"
+		clj -M:uberjar --main-class stackexchange.core --target ./target/stackexchange.jar

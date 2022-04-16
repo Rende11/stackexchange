@@ -1,39 +1,88 @@
-* Example of interactions with the Stackexchange API.
-
-
-** Configuration run
+* Example of interactions with the Stackexchange API
+This web application shows some statistics on answers from Stackoverflow for requested tags. The source of this data is [[https://api.stackexchange.com/][Stackexchange API]].
+After launch one endpoint becomes available, it receives multiple ~tag~ parameter in query string - ~/search?tag=java&tag=clojure~. Only last 100 questions by each tag are respects. In response you get pretty ~json~ with stats by each of your requested tags - amount of answers for answered questions and total amount of tags among this answers. Queries for these tags are executed in parallel within inner thread pool.
 
 ** Examples
+#+NAME: Request
+#+BEGIN_SRC bash
+curl 'http://localhost:8080/search?tag=java&tag=clojure&tag=scala&tag=php&tag=python&tag=ruby&tag=c'
+#+END_SRC
+
+#+NAME: Response
+#+BEGIN_SRC json
+{
+  "scala" : {
+    "total-tags" : 99,
+    "answers" : 5
+  },
+  "clojure" : {
+    "total-tags" : 82,
+    "answers" : 31
+  },
+  "java" : {
+    "total-tags" : 100,
+    "answers" : 4
+  },
+  "php" : {
+    "total-tags" : 104,
+    "answers" : 11
+  },
+  "python" : {
+    "total-tags" : 96,
+    "answers" : 7
+  },
+  "c" : {
+    "total-tags" : 79,
+    "answers" : 15
+  },
+  "ruby" : {
+    "total-tags" : 92,
+    "answers" : 13
+  },
+  "spent-ms" : 1473
+}
+#+END_SRC
+
+** Configuration
+Configuration available in ~.env~ file:
+- ~PORT~ - http port that app exposes
+- ~POOL_SIZE~ - size of the thread pool for parallel requests
+
+** Launch
+- with clojure cli - ~make run-clj~
+or
+- build jar - ~make build~
+- run jar - ~make run-jar~
 
 ** Measurements
 #+BEGIN_SRC Clojure
 (time
-   (app-handler {:request-method :get
-                 :uri "/search"
-                 :query-string "tag=cpp&tag=clojure&tag=javascript&tag=php&tag=java&tag=purescript&tag=ruby"
-                 :pool-size 1}))
-  ;; => "Elapsed time: 8169.954815 msecs"
+ (app-handler {:request-method :get
+               :uri "/search"
+               :query-string "tag=cpp&tag=clojure&tag=javascript&tag=php&tag=java&tag=purescript&tag=ruby"
+               :pool-size 1}))
+;; => "Elapsed time: 8169.954815 msecs"
 
-  (time
-   (app-handler {:request-method :get
-                 :uri "/search"
-                 :query-string "tag=cpp&tag=clojure&tag=javascript&tag=php&tag=java&tag=purescript&tag=ruby"
-                 :pool-size 2}))
-  ;; => "Elapsed time: 3160.608194 msecs"
+(time
+ (app-handler {:request-method :get
+               :uri "/search"
+               :query-string "tag=cpp&tag=clojure&tag=javascript&tag=php&tag=java&tag=purescript&tag=ruby"
+               :pool-size 2}))
+;; => "Elapsed time: 3160.608194 msecs"
 
-  (time
-   (app-handler {:request-method :get
-                 :uri "/search"
-                 :query-string "tag=cpp&tag=clojure&tag=javascript&tag=php&tag=java&tag=purescript&tag=ruby"
-                 :pool-size 4}))
-  ;; => "Elapsed time: 1399.67507 msecs"
+(time
+ (app-handler {:request-method :get
+               :uri "/search"
+               :query-string "tag=cpp&tag=clojure&tag=javascript&tag=php&tag=java&tag=purescript&tag=ruby"
+               :pool-size 4}))
+;; => "Elapsed time: 1399.67507 msecs"
 
-  (time
-   (app-handler {:request-method :get
-                 :uri "/search"
-                 :query-string "tag=cpp&tag=clojure&tag=javascript&tag=php&tag=java&tag=purescript&tag=ruby"
-                 :pool-size 10}))
-  ;; => "Elapsed time: 685.870774 msecs"
+(time
+ (app-handler {:request-method :get
+               :uri "/search"
+               :query-string "tag=cpp&tag=clojure&tag=javascript&tag=php&tag=java&tag=purescript&tag=ruby"
+               :pool-size 10}))
+;; => "Elapsed time: 685.870774 msecs"
 #+END_SRC
 
 ** Useful commands
